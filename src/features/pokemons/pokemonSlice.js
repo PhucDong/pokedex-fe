@@ -7,8 +7,10 @@ export const getPokemons = createAsyncThunk(
   async ({ page, search, type }, { rejectWithValue }) => {
     try {
       let url = `/pokemons?page=${page}&limit=${POKEMONS_PER_PAGE}`;
-      if (search) url += `&search=${search}`;
-      if (type) url += `&type=${type}`;
+      if (search)
+        url = `/pokemons?page=${page}&limit=${POKEMONS_PER_PAGE}&search=${search}`;
+      if (type)
+        url = `/pokemons?page=${page}&limit=${POKEMONS_PER_PAGE}&type=${type}`;
       const response = await apiService.get(url);
       const timeout = () => {
         return new Promise((resolve) => {
@@ -18,8 +20,7 @@ export const getPokemons = createAsyncThunk(
         });
       };
       await timeout();
-      console.log(21, response.data);
-      return response.data;
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -114,44 +115,14 @@ export const pokemonSlice = createSlice({
       state.loading = true;
       state.errorMessage = "";
     },
-    [getPokemonById.pending]: (state) => {
-      state.loading = true;
-      state.errorMessage = "";
-    },
-
-    [addPokemon.pending]: (state) => {
-      state.loading = true;
-      state.errorMessage = "";
-    },
-    [deletePokemon.pending]: (state) => {
-      state.loading = true;
-      state.errorMessage = "";
-    },
-    [editPokemon.pending]: (state) => {
-      state.loading = true;
-      state.errorMessage = "";
-    },
     [getPokemons.fulfilled]: (state, action) => {
       state.loading = false;
       const { search, type } = state;
       if ((search || type) && state.page === 1) {
         state.pokemons = action.payload;
       } else {
-        state.pokemons = [...state.pokemons, ...action.payload];
+        state.pokemons = [...action.payload];
       }
-    },
-    [getPokemonById.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.pokemon = action.payload;
-    },
-    [addPokemon.fulfilled]: (state) => {
-      state.loading = false;
-    },
-    [deletePokemon.fulfilled]: (state) => {
-      state.loading = false;
-    },
-    [editPokemon.fulfilled]: (state) => {
-      state.loading = true;
     },
     [getPokemons.rejected]: (state, action) => {
       state.loading = false;
@@ -161,6 +132,14 @@ export const pokemonSlice = createSlice({
         state.errorMessage = action.error.message;
       }
     },
+    [getPokemonById.pending]: (state) => {
+      state.loading = true;
+      state.errorMessage = "";
+    },
+    [getPokemonById.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.pokemon = action.payload;
+    },
     [getPokemonById.rejected]: (state, action) => {
       state.loading = false;
       if (action.payload) {
@@ -169,7 +148,13 @@ export const pokemonSlice = createSlice({
         state.errorMessage = action.error.message;
       }
     },
-
+    [addPokemon.pending]: (state) => {
+      state.loading = true;
+      state.errorMessage = "";
+    },
+    [addPokemon.fulfilled]: (state) => {
+      state.loading = false;
+    },
     [addPokemon.rejected]: (state, action) => {
       state.loading = false;
       if (action.payload) {
@@ -178,6 +163,13 @@ export const pokemonSlice = createSlice({
         state.errorMessage = action.error.message;
       }
     },
+    [deletePokemon.pending]: (state) => {
+      state.loading = true;
+      state.errorMessage = "";
+    },
+    [deletePokemon.fulfilled]: (state) => {
+      state.loading = false;
+    },
     [deletePokemon.rejected]: (state, action) => {
       state.loading = false;
       if (action.payload) {
@@ -185,6 +177,13 @@ export const pokemonSlice = createSlice({
       } else {
         state.errorMessage = action.error.message;
       }
+    },
+    [editPokemon.pending]: (state) => {
+      state.loading = true;
+      state.errorMessage = "";
+    },
+    [editPokemon.fulfilled]: (state) => {
+      state.loading = true;
     },
     [editPokemon.rejected]: (state, action) => {
       state.loading = false;
