@@ -54,12 +54,13 @@ const defaultValues = {
 
 export const SearchBox = () => {
   const methods = useForm(defaultValues);
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log(61, data.search);
     dispatch(searchQuery(data.search));
+    reset({ search: "" });
     dispatch(changePage(1));
   };
 
@@ -75,18 +76,21 @@ export const SearchBox = () => {
         <Grid item xs={12} sm={12} md={6} sx={styles.center}>
           <Stack sx={{ width: { xs: "90%", md: "100%" } }}>
             <Typography variant="h5">Name or Number</Typography>
+
             <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
               <Stack direction="row" alignItems="center" spacing={2}>
                 <FTextField name="search" sx={styles.inputText} />
                 <SearchOutlined sx={styles.icon} />
               </Stack>
             </FormProvider>
+
             <Typography>
               Use the Advanced Search to explore Pokémon by type, weakness,
               Ability, and more!
             </Typography>
           </Stack>
         </Grid>
+
         <Grid item xs={12} sm={12} md={6} sx={styles.center}>
           <Box sx={styles.boxRight}>
             <Typography variant="h6">
