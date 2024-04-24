@@ -163,16 +163,20 @@ export const DetailPage = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Box
-              sx={{ backgroundColor: "#F2F2F2", borderRadius: 5, padding: 3 }}
+              sx={{ backgroundColor: "#F2F2F2", borderRadius: 5}}
             >
               <CardMedia
                 component="img"
-                image={`${BASE_URL}${currentPokemon?.url}`}
+                image={
+                  currentPokemon?.url.includes("http" || "https")
+                    ? `${currentPokemon?.url}`
+                    : `${BASE_URL}${currentPokemon?.url}`
+                }
                 alt={`${currentPokemon?.name}`}
                 sx={{
                   margin: "auto",
-                  objectFit: "contain",
-                  width: "100%",
+                  height: "260px",
+                  width: "auto",
                   borderRadius: 5,
                 }}
               />
