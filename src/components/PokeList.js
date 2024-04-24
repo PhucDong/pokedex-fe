@@ -235,17 +235,20 @@ export default function PokeList() {
                       style={{
                         backgroundColor: "#F2F2F2",
                         borderRadius: 5,
-                        padding: 30,
                       }}
                     >
                       <CardMedia
                         component="img"
-                        image={`${BASE_URL}${pokemon.url}`}
+                        image={
+                          pokemon.url.includes("http" || "https")
+                            ? `${pokemon.url}`
+                            : `${BASE_URL}${pokemon.url}`
+                        }
                         alt="Missing image"
                         sx={{
                           margin: "auto",
-                          objectFit: "contain",
-                          width: "100%",
+                          height: "150px",
+                          width: "auto",
                           borderRadius: 5,
                         }}
                       />
