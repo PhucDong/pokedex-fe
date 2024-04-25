@@ -30,6 +30,12 @@ export const DetailPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const formattedAbilities = () => {
+    let abilities = "";
+    currentPokemon?.abilities.map((ability) => (abilities += ability + ", "));
+    return abilities.slice(0, abilities.length - 2);
+  };
+
   useEffect(() => {
     dispatch(getPokemonById(id));
   }, [id, dispatch]);
@@ -162,9 +168,7 @@ export const DetailPage = () => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Box
-              sx={{ backgroundColor: "#F2F2F2", borderRadius: 5}}
-            >
+            <Box sx={{ backgroundColor: "#F2F2F2", borderRadius: 5 }}>
               <CardMedia
                 component="img"
                 image={
@@ -184,9 +188,16 @@ export const DetailPage = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <Stack spacing={2}>
+              <Typography variant="p" sx={{ fontWeight: 550 }}>
+                Bio
+              </Typography>
               <Typography variant="p">
                 {currentPokemon?.description ||
                   "There is no info for this Pokemon. Consider expanding the Pokedex by adding more content."}
+              </Typography>
+
+              <Typography variant="p" sx={{ fontWeight: 550 }}>
+                Stats
               </Typography>
               <Box
                 sx={{
@@ -210,11 +221,14 @@ export const DetailPage = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <Typography color="white">Abilities</Typography>
-                    <div>{currentPokemon?.abilities || "Unknown"}</div>
+                    <div>{formattedAbilities()}</div>
                   </Grid>
                 </Grid>
               </Box>
-              <Typography variant="p">Type</Typography>
+
+              <Typography variant="p" sx={{ fontWeight: 550 }}>
+                Types
+              </Typography>
               <Grid container spacing={1}>
                 {currentPokemon?.types.map((type) => (
                   <Grid item key={type} xs={4}>
@@ -222,7 +236,9 @@ export const DetailPage = () => {
                   </Grid>
                 ))}
               </Grid>
-              <Typography variant="p">Weaknesses</Typography>
+              <Typography variant="p" sx={{ fontWeight: 550 }}>
+                Weaknesses
+              </Typography>
               <Grid container spacing={1}>
                 {weaknesses.map((type) => (
                   <Grid item key={type} xs={4}>
