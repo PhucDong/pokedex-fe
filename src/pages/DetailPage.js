@@ -1,12 +1,13 @@
 import {
   Box,
+  Button,
   CardMedia,
   Container,
   Grid,
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { PokeType } from "../components/PokeType";
@@ -14,6 +15,7 @@ import { getPokemonById } from "../features/pokemons/pokemonSlice";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { BASE_URL } from "../app/config";
+import PokemonEdit from "../components/PokemonEdit";
 
 const styles = {
   container: {
@@ -29,6 +31,8 @@ export const DetailPage = () => {
   );
   const { id } = useParams();
   const dispatch = useDispatch();
+  const weaknesses = calculateWeaknesses(currentPokemon?.types);
+  const [openPostEdit, setOpenPostEdit] = useState(false);
 
   const formattedAbilities = () => {
     let abilities = "";
@@ -36,11 +40,17 @@ export const DetailPage = () => {
     return abilities.slice(0, abilities.length - 2);
   };
 
+  const handleOpenPostEdit = () => {
+    setOpenPostEdit(true);
+  };
+
+  const handleClosePostEdit = () => {
+    setOpenPostEdit(false);
+  };
+
   useEffect(() => {
     dispatch(getPokemonById(id));
   }, [id, dispatch]);
-
-  const weaknesses = calculateWeaknesses(currentPokemon?.types);
 
   return (
     <Container maxWidth="lg" disableGutters sx={styles.container}>
@@ -185,6 +195,30 @@ export const DetailPage = () => {
                 }}
               />
             </Box>
+            <Button
+              fullWidth
+              disableRipple
+              onClick={handleOpenPostEdit}
+              sx={{
+                padding: "6px",
+                marginTop: "10px",
+                backgroundColor: "#a4a4a4",
+                textTransform: "capitalize",
+                color: "#fff",
+                fontSize: "1.1rem",
+                borderRadius: "20px",
+                "&:hover": {
+                  backgroundColor: "#a4a4a4",
+                },
+              }}
+            >
+              Edit Pokemon Info
+            </Button>
+            <PokemonEdit
+              pokemon={currentPokemon}
+              openPostEdit={openPostEdit}
+              handleClosePostEdit={handleClosePostEdit}
+            />
           </Grid>
           <Grid item xs={12} md={6}>
             <Stack spacing={2}>
@@ -216,7 +250,7 @@ export const DetailPage = () => {
                     <div>{currentPokemon?.weight || "Unknown"}</div>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography color="white">Height</Typography>
+                    <Typography color="white">Category</Typography>
                     <div>{currentPokemon?.category || "Unknown"}</div>
                   </Grid>
                   <Grid item xs={6}>
