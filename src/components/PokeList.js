@@ -240,9 +240,9 @@ export default function PokeList() {
                       <CardMedia
                         component="img"
                         image={
-                          pokemon.url.includes("http" || "https")
-                            ? `${pokemon.url}`
-                            : `${BASE_URL}${pokemon.url}`
+                          pokemon?.url.includes("https")
+                            ? `${pokemon?.url}`
+                            : `${BASE_URL}${pokemon?.url}`
                         }
                         alt="Missing image"
                         sx={{
