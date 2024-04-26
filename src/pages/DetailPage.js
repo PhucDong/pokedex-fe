@@ -16,6 +16,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { BASE_URL } from "../app/config";
 import PokemonEdit from "../components/PokemonEdit";
+import PokemonDelete from "../components/PokemonDelete";
 
 const styles = {
   container: {
@@ -33,6 +34,7 @@ export const DetailPage = () => {
   const dispatch = useDispatch();
   const weaknesses = calculateWeaknesses(currentPokemon?.types);
   const [openPostEdit, setOpenPostEdit] = useState(false);
+  const [openPokemonDelete, setOpenPokemonDelete] = useState(false);
 
   const formattedAbilities = () => {
     let abilities = "";
@@ -44,8 +46,16 @@ export const DetailPage = () => {
     setOpenPostEdit(true);
   };
 
+  const handleOpenPokemonDelete = () => {
+    setOpenPokemonDelete(true);
+  };
+
   const handleClosePostEdit = () => {
     setOpenPostEdit(false);
+  };
+
+  const handleClosePokemonDelete = () => {
+    setOpenPokemonDelete(false);
   };
 
   useEffect(() => {
@@ -212,12 +222,36 @@ export const DetailPage = () => {
                 },
               }}
             >
-              Edit Pokemon Info
+              Update Pokemon Info
             </Button>
             <PokemonEdit
               pokemon={currentPokemon}
               openPostEdit={openPostEdit}
               handleClosePostEdit={handleClosePostEdit}
+            />
+            <Button
+              fullWidth
+              disableRipple
+              onClick={handleOpenPokemonDelete}
+              sx={{
+                padding: "6px",
+                marginTop: "6px",
+                backgroundColor: "#e3350d",
+                textTransform: "capitalize",
+                color: "#fff",
+                fontSize: "1.1rem",
+                borderRadius: "20px",
+                "&:hover": {
+                  backgroundColor: "#e3350d",
+                },
+              }}
+            >
+              Delete Pokemon
+            </Button>
+            <PokemonDelete
+              pokemon={currentPokemon}
+              openPokemonDelete={openPokemonDelete}
+              handleClosePokemonDelete={handleClosePokemonDelete}
             />
           </Grid>
           <Grid item xs={12} md={6}>
