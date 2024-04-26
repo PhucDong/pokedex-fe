@@ -192,7 +192,7 @@ export const DetailPage = () => {
               <CardMedia
                 component="img"
                 image={
-                  currentPokemon?.url.includes("https")
+                  `${currentPokemon?.url}`.includes("http" || "https")
                     ? `${currentPokemon?.url}`
                     : `${BASE_URL}${currentPokemon?.url}`
                 }
