@@ -8,7 +8,11 @@ import { Box, Button, Container, Grid, Stack } from "@mui/material";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PokeType } from "./PokeType";
 import { useDispatch, useSelector } from "react-redux";
-import { changePage, typeQuery } from "../features/pokemons/pokemonSlice";
+import {
+  changePage,
+  getPokemons,
+  typeQuery,
+} from "../features/pokemons/pokemonSlice";
 import { Link } from "react-router-dom";
 import { pokemonTypes } from "../pokemonTypes";
 import { BASE_URL } from "../app/config";
@@ -153,6 +157,7 @@ export default function PokeList() {
                 onClick={() => {
                   dispatch(changePage(1));
                   dispatch(typeQuery(item));
+                  dispatch(getPokemons({ page: 1, search: null, type: item }));
                 }}
                 type={item}
                 size="large"
@@ -258,7 +263,8 @@ export default function PokeList() {
                         #{`00${pokemon.id}`.slice(-3)}
                       </Typography>
                       <Typography variant="h5">
-                        {`${pokemon.name[0]}`.toUpperCase() + `${pokemon.name}`.slice(1)}
+                        {`${pokemon.name[0]}`.toUpperCase() +
+                          `${pokemon.name}`.slice(1)}
                       </Typography>
                     </CardContent>
                     <CardActions disableSpacing sx={{ padding: "1rem" }}>
