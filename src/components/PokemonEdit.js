@@ -15,6 +15,7 @@ import { LoadingButton } from "@mui/lab";
 import { useDispatch, useSelector } from "react-redux";
 import { FTextField, FormProvider } from "./form";
 import { editPokemon } from "../features/pokemons/pokemonSlice";
+import { pokemonTypes } from "../pokemonTypes";
 
 const customStyledCard = {
   position: "absolute",
@@ -55,6 +56,8 @@ function PokemonEdit({ pokemon, openPostEdit, handleClosePostEdit }) {
     clearErrors();
   };
 
+  const { filteredData } = useSelector((state) => state.pokemons);
+
   const onSubmit = (data) => {
     try {
       setValue("isSubmitting", true);
@@ -66,10 +69,32 @@ function PokemonEdit({ pokemon, openPostEdit, handleClosePostEdit }) {
         id: pokemon?.id,
       };
 
-      if (!isLoading) {
+      const duplicatePokemonIndex = filteredData.findIndex(
+        (item) => item.name === name.toLowerCase()
+      );
+
+      if (duplicatePokemonIndex >= 0) {
         setValue("isSubmitting", false);
         throw new Error("Pokemon already exists.");
       }
+
+      const isPokemonType1Valid = pokemonTypes.includes(type1);
+      if (isPokemonType1Valid === false) {
+        setValue("isSubmitting", false);
+        throw new Error("Pokemon's type 1 is invalid.");
+      }
+
+      if (type2) {
+        type2 = type2.toLowerCase();
+        const isPokemonType2Valid = pokemonTypes.includes(type2);
+
+        if (isPokemonType2Valid === false) {
+          setValue("isSubmitting", false);
+          throw new Error("Pokemon's type 2 is invalid.");
+        }
+      }
+
+      setValue("isSubmitting", false);
 
       dispatch(editPokemon(data));
       handleClosePostEdit();
