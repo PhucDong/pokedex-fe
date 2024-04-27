@@ -38,8 +38,8 @@ export const DetailPage = () => {
 
   const formattedAbilities = () => {
     let abilities = "";
-    currentPokemon?.abilities.map((ability) => (abilities += ability + ", "));
-    return abilities.slice(0, abilities.length - 2);
+    currentPokemon?.abilities?.map((ability) => (abilities += ability + ", "));
+    return abilities ? abilities.slice(0, abilities.length - 2) : "Unknown";
   };
 
   const handleOpenPostEdit = () => {
@@ -104,8 +104,8 @@ export const DetailPage = () => {
                 fontWeight={700}
               >
                 {previousPokemon?.name
-                  ? previousPokemon.name[0].toUpperCase() +
-                    previousPokemon.name.slice(1)
+                  ? previousPokemon?.name[0].toUpperCase() +
+                    previousPokemon?.name.slice(1)
                   : "Unknown"}
               </Typography>
             </Box>
@@ -133,8 +133,8 @@ export const DetailPage = () => {
                 marginRight={1}
               >
                 {nextPokemon?.name
-                  ? nextPokemon.name[0].toUpperCase() +
-                    nextPokemon.name.slice(1)
+                  ? nextPokemon?.name[0].toUpperCase() +
+                    nextPokemon?.name.slice(1)
                   : "Unknown"}
               </Typography>
               <Typography color="white" fontSize={24} fontWeight={700}>
@@ -166,8 +166,8 @@ export const DetailPage = () => {
           <Box bgcolor="white" pt={2}>
             <Typography sx={{ mr: 2 }} variant="h4" display="inline">
               {currentPokemon?.name
-                ? currentPokemon.name[0].toUpperCase() +
-                  currentPokemon.name.slice(1)
+                ? currentPokemon?.name[0].toUpperCase() +
+                  currentPokemon?.name.slice(1)
                 : "Unknown"}
             </Typography>
             <Typography variant="h4" display="inline" color="gray">
