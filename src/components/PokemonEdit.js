@@ -49,7 +49,6 @@ function PokemonEdit({ pokemon, openPostEdit, handleClosePostEdit }) {
 
   const isSubmitting = watch("isSubmitting");
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.pokemons);
 
   const handleCloseEditForm = () => {
     handleClosePostEdit();
