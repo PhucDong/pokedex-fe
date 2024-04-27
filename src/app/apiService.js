@@ -5,8 +5,6 @@ const apiService = axios.create({
   baseURL: BASE_URL,
 });
 
-console.log(8, BASE_URL);
-
 apiService.interceptors.request.use(
   (request) => {
     console.log("Start Request", request);
