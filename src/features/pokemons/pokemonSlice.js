@@ -79,8 +79,8 @@ export const deletePokemon = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       let url = `/pokemons/${id}`;
-      await apiService.delete(url);
-      dispatch(getPokemonById(id + 1));
+      const response = await apiService.delete(url);
+      dispatch(getPokemonById(response));
       return;
     } catch (error) {
       return rejectWithValue(error);
@@ -98,6 +98,8 @@ export const pokemonSlice = createSlice({
       nextPokemon: null,
       previousPokemon: null,
     },
+    pokemonNames: [],
+    filteredData: [],
     search: "",
     type: "",
     page: 1,
@@ -118,7 +120,7 @@ export const pokemonSlice = createSlice({
     },
   },
   extraReducers: {
-    [getPokemons.pending]: (state, action) => {
+    [getPokemons.pending]: (state) => {
       state.loading = true;
       state.errorMessage = "";
     },
@@ -128,7 +130,7 @@ export const pokemonSlice = createSlice({
       if ((search || type) && state.page === 1) {
         state.pokemons = action.payload[0];
       } else {
-        state.pokemons = [...action.payload[0]];
+        state.pokemons = [...state.pokemons, ...action.payload[0]];
         state.pokemonNames = [...action.payload[1]];
       }
     },
@@ -146,10 +148,12 @@ export const pokemonSlice = createSlice({
     },
     [getPokemonById.fulfilled]: (state, action) => {
       state.loading = false;
-      const { prevPokemon, currentPokemon, nextPokemon } = action.payload;
+      const { prevPokemon, currentPokemon, nextPokemon, filteredData } =
+        action.payload;
       state.pokemon.currentPokemon = currentPokemon;
       state.pokemon.previousPokemon = prevPokemon;
       state.pokemon.nextPokemon = nextPokemon;
+      state.filteredData = filteredData;
     },
     [getPokemonById.rejected]: (state, action) => {
       state.loading = false;
@@ -179,13 +183,8 @@ export const pokemonSlice = createSlice({
       state.loading = true;
       state.errorMessage = "";
     },
-    [deletePokemon.fulfilled]: (state) => {
+    [deletePokemon.fulfilled]: (state, action) => {
       state.loading = false;
-      // state.pokemon = {
-      //   currentPokemon: null,
-      //   nextPokemon: null,
-      //   previousPokemon: null,
-      // };
     },
     [deletePokemon.rejected]: (state, action) => {
       state.loading = false;
