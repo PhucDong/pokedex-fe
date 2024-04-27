@@ -3,7 +3,11 @@ import { Stack, Container, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { changePage, searchQuery } from "../features/pokemons/pokemonSlice";
+import {
+  changePage,
+  getPokemons,
+  searchQuery,
+} from "../features/pokemons/pokemonSlice";
 import { FormProvider, FTextField } from "./form";
 
 const styles = {
@@ -58,10 +62,12 @@ export const SearchBox = () => {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(61, data.search);
-    dispatch(searchQuery(data.search));
-    reset({ search: "" });
+    let { search } = data;
+    search = search.toLowerCase();
+    dispatch(searchQuery(search));
     dispatch(changePage(1));
+    dispatch(getPokemons({ page: 1, search, type: null }));
+    reset({ search: "" });
   };
 
   return (
