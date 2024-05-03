@@ -32,7 +32,7 @@ export const getPokemonById = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       let url = `/pokemons/${id}`;
-      const response = await apiService.get(url, { mode: "cors" });
+      const response = await apiService.get(url);
       if (!response) return rejectWithValue({ message: "No data" });
       return response;
     } catch (error) {
@@ -46,7 +46,7 @@ export const addPokemon = createAsyncThunk(
   async ({ name, imgUrl, types }, { rejectWithValue }) => {
     try {
       let url = "/pokemons";
-      await apiService.post(url, { name, url: imgUrl, types, mode: "cors" });
+      await apiService.post(url, { name, url: imgUrl, types });
       const response = await apiService.get(url);
       return response;
     } catch (error) {
@@ -65,7 +65,6 @@ export const editPokemon = createAsyncThunk(
         url,
         types,
         id,
-        mode: "cors",
       });
       dispatch(getPokemonById(id));
       return response;
@@ -80,7 +79,7 @@ export const deletePokemon = createAsyncThunk(
   async (id, { rejectWithValue, dispatch }) => {
     try {
       let url = `/pokemons/${id}`;
-      const response = await apiService.delete(url, { mode: "cors" });
+      const response = await apiService.delete(url);
       dispatch(getPokemonById(response));
       return;
     } catch (error) {
