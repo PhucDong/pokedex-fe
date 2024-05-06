@@ -66,7 +66,7 @@ export const editPokemon = createAsyncThunk(
         types,
         id,
       });
-      dispatch(getPokemonById(id));
+      // dispatch(getPokemonById(id));
       return response;
     } catch (error) {
       return rejectWithValue(error);
