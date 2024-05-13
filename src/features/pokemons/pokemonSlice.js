@@ -66,7 +66,6 @@ export const editPokemon = createAsyncThunk(
         types,
         id,
       });
-      // dispatch(getPokemonById(id));
       return response;
     } catch (error) {
       return rejectWithValue(error);
@@ -76,11 +75,11 @@ export const editPokemon = createAsyncThunk(
 
 export const deletePokemon = createAsyncThunk(
   "pokemons/deletePokemon",
-  async (id, { rejectWithValue, dispatch }) => {
+  async (id, { rejectWithValue }) => {
     try {
       let url = `/pokemons/${id}`;
-      await apiService.delete(url);
-      return;
+      const response = await apiService.delete(url);
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -184,7 +183,6 @@ export const pokemonSlice = createSlice({
     },
     [deletePokemon.fulfilled]: (state, action) => {
       state.loading = false;
-      console.log(188, typeof action.payload);
     },
     [deletePokemon.rejected]: (state, action) => {
       state.loading = false;
