@@ -1,6 +1,7 @@
 import { Box, Button, Card, Container, Modal, Typography } from "@mui/material";
 import { deletePokemon } from "../features/pokemons/pokemonSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const customStyledDeleteCard = {
   position: "absolute",
@@ -18,9 +19,15 @@ function PokemonDelete({
   handleClosePokemonDelete,
 }) {
   const dispatch = useDispatch();
+  const nextPokemonId = useSelector(
+    (state) => state.pokemons?.pokemon?.nextPokemon?.id
+  );
+
+  const navigate = useNavigate();
 
   const handleDeletePokemon = () => {
     dispatch(deletePokemon(pokemon.id));
+    navigate(`/pokemons/${nextPokemonId}`);
     handleClosePokemonDelete();
   };
 
